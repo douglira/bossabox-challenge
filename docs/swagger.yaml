@@ -1,0 +1,236 @@
+openapi: '3.0.0'
+
+info:
+  title: API - Very Useful Tools to Remember
+  description: A simple API to manage useful tools
+  version: 1.0.0
+
+servers:
+  - url: /api/v1
+    description: Development server
+paths:
+  /register:
+    post:
+      summary: Register a user
+      description: register a new user into the system
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegisterRequest'
+      responses:
+        '201':
+          description: Returns the user data registered with bearer token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAuthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        default:
+          description: API Errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorObject'
+  /login:
+    post:
+      summary: Authenticate a user
+      description: Authenticate a user into the system
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Returns the user data registered with bearer token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAuthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        default:
+          description: API Errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorObject'
+  /tools:
+    get:
+      summary: Get all tools from user
+      description: List all tools created by user
+      tags:
+        - Tools
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: tag
+          in: query
+          schema:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: Returns the user data registered with bearer token
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ToolSchema'
+        default:
+          description: API Errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorObject'
+    post:
+      summary: Save a new tool
+      security:
+        - BearerAuth: []
+      description: Store a tool created from the user
+      tags:
+        - Tools
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreationToolSchema'
+      responses:
+        '201':
+          description: Returns the tool created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolSchema'
+        default:
+          description: API Errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorObject'
+  /tools/{id}:
+    delete:
+      summary: Delete a new tool
+      security:
+        - BearerAuth: []
+      description: Remove a tool created from the user
+      tags:
+        - Tools
+      parameters:
+        - name: id
+          in: path
+          description: Tool ID
+          required:
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Tool deleted successfully
+        default:
+          description: API Errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorObject'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+  responses:
+    Unauthorized:
+      description: Not authorized operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalErrorObject'
+
+  schemas:
+    InternalErrorObject:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+        data:
+          type: object
+
+    UserRegisterRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+    UserAuthResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        token:
+          type: string
+    ToolSchema:
+      type: object
+      required:
+        - title
+        - link
+      properties:
+        title:
+          type: string
+        link:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        userId:
+          type: string
+    CreationToolSchema:
+      type: object
+      required:
+        - title
+        - link
+      properties:
+        title:
+          type: string
+        link:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+
+

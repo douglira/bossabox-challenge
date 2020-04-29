@@ -2,35 +2,37 @@ const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
 const mongoose = require('mongoose')
+const swaggerUI = require('swagger-ui-express')
+const YAML = require('yamljs')
 
-const dbConfig = require('./config/database')
-const router = require('./routes')
+const container = require('./container')
+const Constants = require('./libs/constants')
 
-class App {
-  constructor () {
-    this.isDev = process.env.NODE_ENV !== 'production'
-
-    this.server = express()
-
-    this.database()
-    this.middlewares()
-    this.routes()
+module.exports = async () => {
+  const server = express()
+  const config = container.resolve('config')
+  const apiRoutes = {
+    v1: container.resolve('v1Routes')
   }
 
-  async database () {
-    await mongoose.connect(dbConfig.mongo.uri, dbConfig.mongo.options)
+  try {
+    const mongo = config.getDatabase('mongo')
+    await mongoose.connect(mongo.uri, mongo.options)
+  } catch (err) {
+    console.error('ErrorConnection MongoDB:', err.stack)
   }
 
-  middlewares () {
-    this.server.use(express.json())
-    this.server.use(helmet())
-    this.server.use(cors())
-  }
+  server.use(express.json())
+  server.use(helmet())
+  server.use(cors())
 
-  routes () {
-    this.server.use('/api', router)
-    this.server.use((_, res) => res.status(404).send('RESOURCE NOT FOUND'))
+  const swaggerDocument = YAML.load('./docs/swagger.yaml')
+  server.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
+
+  server.use('/api/v1', apiRoutes.v1.router)
+  server.use((_, res) => res.status(404).send(Constants.ERROR.RESOURCE_NOT_FOUND))
+
+  return {
+    server
   }
 }
-
-module.exports = new App().server

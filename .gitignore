@@ -108,10 +108,10 @@ dist/
 tmp/
 temp/
 
-# Docker
-docker/docker-compose.yml
-
 # Terraform
 .terraform/
 
 # End of https://www.gitignore.io/api/node
+
+# DataSource
+datasource/

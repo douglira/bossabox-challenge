@@ -3,7 +3,7 @@
 
 module.exports = {
   // All imported modules in your tests should be mocked automatically
-  // automock: false,
+  // automock: true,
 
   // Stop running tests after `n` failures
   // bail: 0,
@@ -18,29 +18,38 @@ module.exports = {
   clearMocks: true,
 
   // Indicates whether the coverage information should be collected while executing the test
-  // collectCoverage: false,
+  collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  // collectCoverageFrom: undefined,
+  collectCoverageFrom: [
+    '<rootDir>/src/services/**/*.js',
+    '!<rootDirectory>**/node_modules/**'
+  ],
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: 'coverage',
+  coverageDirectory: '<rootDir>/__tests__/coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
-  // coveragePathIgnorePatterns: [
-  //   "/node_modules/"
-  // ],
+  coveragePathIgnorePatterns: [
+    '/node_modules/'
+  ],
 
   // A list of reporter names that Jest uses when writing coverage reports
-  // coverageReporters: [
-  //   "json",
-  //   "text",
-  //   "lcov",
-  //   "clover"
-  // ],
+  coverageReporters: [
+    'json',
+    'html',
+    'text'
+  ],
 
   // An object that configures minimum threshold enforcement for coverage results
-  // coverageThreshold: undefined,
+  coverageThreshold: {
+    global: {
+      branches: 90,
+      functions: 90,
+      lines: 90,
+      statements: 90
+    }
+  },
 
   // A path to a custom dependency extractor
   // dependencyExtractor: undefined,
@@ -49,7 +58,7 @@ module.exports = {
   // errorOnDeprecated: false,
 
   // Force coverage collection from ignored files using an array of glob patterns
-  // forceCoverageMatch: [],
+  forceCoverageMatch: ['**/*.js'],
 
   // A path to a module which exports an async function that is triggered once before all test suites
   // globalSetup: undefined,
@@ -70,12 +79,9 @@ module.exports = {
 
   // An array of file extensions your modules use
   // moduleFileExtensions: [
-  //   "js",
-  //   "json",
-  //   "jsx",
-  //   "ts",
-  //   "tsx",
-  //   "node"
+  //   'js',
+  //   'json',
+  //   'node'
   // ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
@@ -112,11 +118,12 @@ module.exports = {
   // restoreMocks: false,
 
   // The root directory that Jest should scan for tests and modules within
-  rootDir: '__tests__',
+  // rootDir: '',
 
   // A list of paths to directories that Jest should use to search for files in
   roots: [
-    '__tests__/**/*.test.js'
+    './__tests__/unit',
+    './__tests__/integration'
   ],
 
   // Allows you to use a custom runner instead of Jest's default test runner
@@ -132,7 +139,7 @@ module.exports = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment: 'node'
+  testEnvironment: 'node',
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
@@ -184,5 +191,5 @@ module.exports = {
   // watchPathIgnorePatterns: [],
 
   // Whether to use watchman for file crawling
-  // watchman: true,
+  watchman: true
 }
