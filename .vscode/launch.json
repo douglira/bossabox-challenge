@@ -19,14 +19,16 @@
       "name": "Unit tests",
       "type": "node",
       "request": "launch",
-      "runtimeArgs": [
-        "--inspect-brk",
-        "${workspaceRoot}/node_modules/.bin/jest",
-        "--runInBand"
-      ],
+      "program": "${workspaceRoot}/node_modules/.bin/jest",
+      "args": ["--runInBand", "--config=${workspaceRoot}/jest.config.js"],
+      // "runtimeArgs": [
+      //   "--inspect-brk",
+      //   "${workspaceRoot}/node_modules/.bin/jest",
+      //   "--runInBand"
+      // ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "port": 9229,
+      // "port": 9229,
       "runtimeExecutable": "${HOME}/.nvm/versions/node/v12.10.0/bin/node"
     }
   ]

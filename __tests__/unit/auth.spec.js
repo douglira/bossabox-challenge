@@ -6,7 +6,7 @@ const APIError = require('../../src/libs/api-error')
 
 const AuthService = require('../../src/services/auth')
 
-describe('Unit tests - Auth', () => {
+describe('Unit tests - Auth Service', () => {
   test('Register - should be able to register successfully', async () => {
     const userPayload = {
       name: 'Douglas Lira',

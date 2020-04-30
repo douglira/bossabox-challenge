@@ -5,6 +5,7 @@ const ModelsFactory = require('./models')
 const RepositoriesFactory = require('./repositories')
 const ControllersFactory = require('./controllers')
 const ServicesFactory = require('./services')
+const ValidatorsFactory = require('./validators')
 const MiddlewaresFactory = require('./middlewares')
 const RoutesVersion1 = require('./routes/v1')
 
@@ -22,6 +23,7 @@ container.register({
   ...ServicesFactory(),
   ...ControllersFactory(),
   ...MiddlewaresFactory(),
+  ...ValidatorsFactory(),
 
   v1Routes: asFunction(RoutesVersion1)
 })

@@ -11,8 +11,6 @@ module.exports = class APIError extends Error {
     this.statusCode = code
     this.message = message
     this.additionalData = data
-    if (error instanceof Error) {
-      this.stack = error.stack
-    }
+    this.stack = error && error.stack
   }
 }

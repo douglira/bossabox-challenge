@@ -4,6 +4,8 @@ module.exports = ({
   authorizerMiddleware,
   errorHandlerMiddleware,
 
+  authValidator,
+
   toolController,
   authController
 }) => {
@@ -12,8 +14,8 @@ module.exports = ({
   /* Auth */
   router.use(
     '/auth',
-    router.post('/register', authController.register),
-    router.post('/login', authController.login)
+    router.post('/register', authValidator.register(), authController.register),
+    router.post('/login', authValidator.login(), authController.login)
   )
 
   /* Tools */
